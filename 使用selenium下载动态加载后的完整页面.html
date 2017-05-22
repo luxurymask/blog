@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <title>踩坑：使用selenium下载动态加载后的完整页面</title>
+</head>
+<body>
+<h2><b>踩坑：使用selenium下载动态加载后的完整页面</b></h2>
+<p>直接上代码吧：</p>
+<p>from selenium import webdriver</p>
+<p>driver = webdriver.Firefox()</p>
+<p>driver.get("https://docs.microsoft.com/en-US/windows/uwp/layout/index")</p>
+<p>#driver有一个.page_source保存着完整的页面代码。</p>
+<p>html_source = driver.page_source</p>
+<p>不过问题来了，动态加载需要时间，你总得给它一点加载的时间，所以需要wait，那wait多长时间好呢？</p>
+<p>这时候大概有两种思路，一种，就固定一个时间，你加载不完就算了。另一种，在页面间找到一个共有的标识，来判断页面加载好了。</p>
+<p>第一种思路肯定没有第二种好，那为啥不都用第二种？因为第二种需要找出一个没个页面都最后加载完的flag标签，很不容易的吧。</p>
+<p>第一种思路有两种方法，一种直接线程sleep，selenium为我们提供了另外一种，就是implicit wait。</p>
+<p>先看写法：</p>
+<p><pre>driver = webdriver.Firefox()</pre></p>
+<p><pre>driver.implicitly_wait(10) # seconds</pre></p>
+<p><pre>driver.get("http://somedomain/url_that_delays_loading")</pre></p>
+<p>这是<a href="http://selenium-python.readthedocs.io/waits.html?highlight=expected_conditions#explicit-waits">http://selenium-python.readthedocs.io/waits.html?highlight=expected_conditions#explicit-waits</a>给的示例程序，这里的意思是，10秒钟内，加载完就直接向后执行，到10秒不管加载没加载完都向后执行。</p>
+<p>selenium也为第二种思路提供了方法，就是explicit wait。<p>
+<p><pre>from selenium import webdriver</pre></p>
+<p><pre>from selenium.webdriver.common.by import By</pre></p>
+<p><pre>from selenium.webdriver.support.ui import WebDriverWait</pre></p>
+<p><pre>from selenium.webdriver.support import expected_conditions as EC</pre></p>
+<p></p>
+<p><pre>driver = webdriver.Firefox()</pre></p>
+<p><pre>driver.get("http://somedomain/url_that_delays_loading")</pre></p>
+<p><pre>try:</pre></p>
+<p><pre>    element = WebDriverWait(driver, 10).until(</pre></p>
+<p><pre>        EC.presence_of_element_located((By.ID, "myDynamicElement"))</pre></p>
+<p><pre>    )</pre></p>
+<p><pre>finally:</pre></p>
+<p><pre>    driver.quit()</pre></p>
+<p>这个示例我看了半天没看明白咋用，就是这个EC.presence_of_element_located到底接收一个啥参数。</p>
+<p>查文档，<a href="http://selenium-python.readthedocs.io/api.html#selenium.webdriver.support.expected_conditions.presence_of_element_located">http://selenium-python.readthedocs.io/api.html#selenium.webdriver.support.expected_conditions.presence_of_element_located</a>告诉我：class selenium.webdriver.support.expected_conditions.presence_of_element_located(locator)，是传一个locator，但这个locator是个啥我就整不明白。</p>
+<p>终于，最后还是在文档里找到，<a href="http://selenium-python.readthedocs.io/api.html?highlight=locator#locate-elements-by">http://selenium-python.readthedocs.io/api.html?highlight=locator#locate-elements-by</a>,locator其实是一个tuple,locator is a tuple of (by, path) （不过这句话不在这儿，是在另一个地方说的：<a href="http://selenium-python.readthedocs.io/api.html?highlight=locator#selenium.webdriver.support.expected_conditions.element_located_selection_state_to_be">http://selenium-python.readthedocs.io/api.html?highlight=locator#selenium.webdriver.support.expected_conditions.element_located_selection_state_to_be</a> ）, 文档中给出了by的各种提供的类型（<a href="http://selenium-python.readthedocs.io/api.html?highlight=locator#selenium.webdriver.common.by.By">http://selenium-python.readthedocs.io/api.html?highlight=locator#selenium.webdriver.common.by.By</a>），最后我用XPath做的定位。</p>
+<p>代码:</p>
+<p><pre>self.driver.get(url)</pre></p>
+<p><pre>element = WebDriverWait(driver, 10).until(</pre></p>
+<p><pre>    EC.presence_of_element_located((By.XPATH, self.flag_xpath))</pre></p>
+<p><pre>)</pre></p>
+<p><pre>html = self.driver.page_source</pre></p>
+<p></p>
+</body>
+</html>
