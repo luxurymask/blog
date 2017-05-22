@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <title>[python] selenium报错</title>
+</head>
+<body>
+<h2><b>踩坑：[python] selenium报错</b></h2>
+<p>老师让改个爬虫支持爬取网页由js动态加载的部分，需要用selenium来做（好像比较方便，比webkit方便？）。</p>
+<p>以前电脑上安装过python 2.7，直接装下selenium就行。</p>
+<p>pip install selenium不太好使，不知道咋回事儿。就换了easy_install selenium来安装。</p>
+<p>Searching for selenium</p>
+<p>Best match: selenium 3.4.2</p>
+<p>Adding selenium 3.4.2 to easy-install.pth file</p>
+<p>
+<p>Using /Library/Python/2.7/site-packages</p>
+<p>Processing dependencies for selenium</p>
+<p>Finished processing dependencies for selenium</p>
+<p>应该是成功了。</p>
+<p>然后试一下，看能不能调到firefox，结果出了问题。</p>
+<p>>>> from selenium import webdriver</p>
+<p>>>> driver = webdriver.Firefox()</p>
+<p>Traceback (most recent call last):</p>
+<p>  File "<stdin>", line 1, in <module></p>
+<p>  File "/Library/Python/2.7/site-packages/selenium/webdriver/firefox/webdriver.py", line 142, in __init__</p>
+<p>    self.service.start()</p>
+<p>  File "/Library/Python/2.7/site-packages/selenium/webdriver/common/service.py", line 81, in start</p>
+<p>    os.path.basename(self.path), self.start_error_message)</p>
+<p>selenium.common.exceptions.WebDriverException: Message: 'geckodriver' executable needs to be in PATH. </p>
+<p></p>
+<p>>>> exit()</p>
+<p>咋回事儿，查了一下，是firefox驱动'geckodriver'没加好。</p>
+<p>在<a href="http://selenium-python.readthedocs.io/">http://selenium-python.readthedocs.io/</a>下载了驱动，解压到/usr/local/bin，好了。</p>
+<p>>>> from selenium import webdriver</p>
+<p>>>> driver = webdriver.Firefox()</p>
+<p>>>></p>
+<p>firefox成功打开，收工。</p>
+<p></p>
+</body>
+</html>
