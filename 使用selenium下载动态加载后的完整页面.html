@@ -38,6 +38,8 @@
 <p>查文档，<a href="http://selenium-python.readthedocs.io/api.html#selenium.webdriver.support.expected_conditions.presence_of_element_located">http://selenium-python.readthedocs.io/api.html#selenium.webdriver.support.expected_conditions.presence_of_element_located</a>告诉我：class selenium.webdriver.support.expected_conditions.presence_of_element_located(locator)，是传一个locator，但这个locator是个啥我就整不明白。</p>
 <p>终于，最后还是在文档里找到，<a href="http://selenium-python.readthedocs.io/api.html?highlight=locator#locate-elements-by">http://selenium-python.readthedocs.io/api.html?highlight=locator#locate-elements-by</a>,locator其实是一个tuple,locator is a tuple of (by, path) （不过这句话不在这儿，是在另一个地方说的：<a href="http://selenium-python.readthedocs.io/api.html?highlight=locator#selenium.webdriver.support.expected_conditions.element_located_selection_state_to_be">http://selenium-python.readthedocs.io/api.html?highlight=locator#selenium.webdriver.support.expected_conditions.element_located_selection_state_to_be</a> ）, 文档中给出了by的各种提供的类型（<a href="http://selenium-python.readthedocs.io/api.html?highlight=locator#selenium.webdriver.common.by.By">http://selenium-python.readthedocs.io/api.html?highlight=locator#selenium.webdriver.common.by.By</a>），最后我用XPath做的定位。</p>
 <p>代码:</p>
+<p><pre>self.flag_xpath = "//h3[@class='or-t or-o']"</pre></p>
+<p><pre>...</pre></p>
 <p><pre>self.driver.get(url)</pre></p>
 <p><pre>element = WebDriverWait(driver, 10).until(</pre></p>
 <p><pre>    EC.presence_of_element_located((By.XPATH, self.flag_xpath))</pre></p>
