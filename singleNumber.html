@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <title>singleNumber</title>
+</head>
+<body>
+<h2><b>小trick：singleNumber</b></h2>
+<p>今日头条面试官给我出了一道题，数组中数成对出现，只有两个数是单独的，要求找出两个数。</p>
+<p>这是一道系列题，leetcode上有。标签是bit manipulation。</p>
+<p>它的简单版本 -- 数组中数成对出现，只有一个数是单独的，找出这个数。-- 很容易，只需要利用异或，从头异或到尾即可。</p>
+<p>但两个数怎么办呢？我们可以想办法把数分两堆。</p>
+<p>首先要利用两个数的异或，异或的结果中所有的1都是两个数不同的位，或者说，异或结果中任意一个1都是两个数不同的位，那么我们可以随意取出一个为1的位，就可以把两个数区分开来，并且剩下的数也可以按任意一位分为两堆，问题就是取出这个为1的位。</p>
+<p>这里就利用到了<a href="diff &= -diff">diff &= -diff</a>，取最右侧的那个1。</p>
+<p>取出1以后重新遍历数组，给数进行分堆并且异或，直接得出两个数。</p>
+<p>代码：</p>
+<p><pre>public int[] singleNumberIII(int[] nums){</pre></p>
+<p><pre>	int[] result = new int[2];</pre></p>
+<p><pre>	int tResult = 0;</pre></p>
+<p><pre>	for(int i : nums){</pre></p>
+<p><pre>		tResult ^= i;</pre></p>
+<p><pre>	}</pre></p>
+<p><pre>	</pre></p>
+<p><pre>	tResult &= -tResult;</pre></p>
+<p><pre>	</pre></p>
+<p><pre>	for(int i : nums){</pre></p>
+<p><pre>		if((tResult & i) != 0){</pre></p>
+<p><pre>			result[0] ^= i;</pre></p>
+<p><pre>		}else{</pre></p>
+<p><pre>			result[1] ^= i;</pre></p>
+<p><pre>		}</pre></p>
+<p><pre>	}</pre></p>
+<p><pre>	</pre></p>
+<p><pre>	return result;</pre></p>
+<p><pre>}</pre></p>
+<p></p>
+<p>唉，面试好难。</p>
+</body>
+</html>
