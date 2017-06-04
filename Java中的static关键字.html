@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <title>Java中的static关键字</title>
+</head>
+<body>
+<h2><b>[Java基础]Java中的static关键字</b></h2>
+<p>《Java编程思想》P29讲了static关键字，总结一下。</p>
+<p>static关键字可以用来修饰字段（成员）、方法以及域。</p>
+<p>被static关键字修饰的内容在内存中只有唯一的一块地址空间，不依赖于对象而存在。因此也可以直接使用类名进行调用。但使用对象调用也没有问题，只不过所有对象调用的都是同一个内容罢了（听起来就很容易出现错误，所以类名调用既清晰又安全，显然更可取）。</p>
+<p>在被static修饰的方法中不可以直接使用非static的成员或方法（当然你在方法里新创建个对象来用是没问题的），因为static方法在被调用的时候很可能没有对象存在，我猜想即使是用对象调用，方法本身也难知道是哪个对象调用的吧，所以如果方法内部有需要依赖对象的方法（即非static方法），肯定是不行的。</p>
+<p>static关键字还可以用于修饰内部类，这个等看到内部类的时候再说好了。</p>
+<p>下边儿俩图简单做个代码验证：</p>
+<p><a href="imgs/Java中的static关键字_img1.png"><img src="imgs/Java中的static关键字_img1.png" width="50%" height="50%"></img></a></p>
+<p></p>
+<p><a href="imgs/Java中的static关键字_img2.png"><img src="imgs/Java中的static关键字_img2.png" width="50%" height="50%"></img></a></p>
+<p>c u.</p>
+</body>
+</html>
