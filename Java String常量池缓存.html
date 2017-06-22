@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <title>Java String常量池缓存</title>
+</head>
+<body>
+<h2><b>为啥s1 == s2</b></h2>
+<p>要知道，作为一个基础薄弱的人，还是很痛苦的。经常看一本书就发现有基础的问题绕不明白。</p>
+<p>比如今天看多线程，书里提到要警惕JVM中String的常量池缓存，我就有点儿懵。略有耳闻，但始终很懵。</p>
+<p>是这样的：</p>
+<p><pre>String s1 = "a";</pre></p>
+<p><pre>String s2 = "a";</pre></p>
+<p><pre>String s3 = new String("a");</pre></p>
+<p><pre>System.out.println(s1 == s2);</pre></p>
+<p><pre>System.out.println(s1 == s3);</pre></p>
+<p>结果是</p>
+<p>true</p>
+<p>false</p>
+<p>所以你说为啥？那你让我说我也能说出来点儿，因为.java文件编译成.class文件以后，在.class文件中就有一块儿地方儿专门存放字面量这些东西，叫常量池，比如一个"a",然后你要用一个String的时候就去常量池里找，找着了直接就用那个对象了，找不着再新建。是这意思吧。那你说这里字面量是啥？不就是"a"么？那凭啥new String("a")里的"a"你就不给放进常量池呢？</p>
+<p>对我真就这么想的，刚才。我还特意去看了编译的过程中都发生了啥。看完发现...是我自己犯了傻。</p>
+<p>对，你已经发现了吧？"a"当然放进常量池了啊，但是s3引用的是一个new出来的String对象，而这个"a"只是作为String对象的一个构造参传进去的，那你编译的时候类都没加载呢你觉得编译器能知道new出来一个什么样的String嘛？嗯？嗯嗯？</p>
+<p>idiot.</p>
+</body>
+</html>
