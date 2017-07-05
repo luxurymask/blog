@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <title>关于局部int型变量的入栈方式</title>
+</head>
+<body>
+<h2><b>关于局部int型变量的入栈方式</b></h2>
+<p>这个标题可能表述的不是很清楚，先说下啥意思。</p>
+<p>是这样的，JVM的栈中局部变量表和操作数栈，局部变量表中存基本类型数据，reference和returnAddress，那么问题来了，JVM的方法区中有个运行时常量池，存放各种字面量和符号引用，那么比如在函数内部我声明一个int i = 0;那这个0是存在局部变量表还是运行时常量池中呢？</p>
+<p>本来对JVM就不是特别理解，所以我做了个实验。</p>
+<p><a href="imgs/关于局部int型变量的入栈方式_img1.png"><img src="imgs/关于局部int型变量的入栈方式_img1.png" width="20%" height="20%"></img></a></p>
+<p><a href="imgs/关于局部int型变量的入栈方式_img2.png"><img src="imgs/关于局部int型变量的入栈方式_img2.png" width="50%" height="50%"></img></a></p>
+<p>-1 ~ 5直接用iconst_m1 ~ iconst_5读取到操作数栈。</p>
+<p>-128 ~ -2, 6 ~ 127使用bipush读取到操作数栈。</p>
+<p>-32768 ~ -129, 128 ~ 32767使用sipush读取到操作数栈。</p>
+<p>注意：小于-32768或者大于32767的int字面量，就使用ldc命令从运行时常量池读取了。</p>
+<p>每次读取到操作数栈后，再从操作数栈istore到局部变量表。</p>
+<p>至于iconst，bipush，sipush，ldc都是咋回事儿，为啥用这个规则处理，等我再研究研究。</p>
+</body>
+</html>
